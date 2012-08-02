@@ -23,8 +23,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.jboss.seam.examples.booking.i18n.ApplicationMessages;
 
-import org.jboss.seam.examples.booking.i18n.DefaultBundleKey;
 import org.jboss.seam.examples.booking.model.User;
 import org.jboss.seam.international.status.Messages;
 
@@ -36,6 +36,10 @@ import org.jboss.seam.international.status.Messages;
 @Stateful
 @Model
 public class PasswordManager {
+    
+    @Inject
+    ApplicationMessages appMsg;
+    
     @PersistenceContext
     private EntityManager em;
 
@@ -54,7 +58,7 @@ public class PasswordManager {
 
     public void changePassword() {
         em.merge(user);
-        messages.info(new DefaultBundleKey("account_passwordChanged")).defaults("Password successfully updated.");
+        messages.info(appMsg.accountPasswordChanged());
         changed = true;
     }
 

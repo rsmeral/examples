@@ -23,11 +23,10 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
+import org.jboss.seam.examples.booking.i18n.ApplicationMessages;
 
-import org.jboss.seam.examples.booking.i18n.DefaultBundleKey;
 import org.jboss.seam.examples.booking.model.User;
 import org.jboss.seam.international.status.Messages;
-import org.jboss.seam.international.status.builder.BundleTemplateMessage;
 
 /**
  * A JSF Validator, used to check that the password the user submits matches that on record.
@@ -36,8 +35,9 @@ import org.jboss.seam.international.status.builder.BundleTemplateMessage;
  */
 @FacesValidator("currentPassword")
 public class CurrentPasswordValidator implements Validator {
+    
     @Inject
-    private BundleTemplateMessage messageBuilder;
+    ApplicationMessages appMsg;
 
     @Inject
     @Authenticated
@@ -53,9 +53,7 @@ public class CurrentPasswordValidator implements Validator {
              * FIXME: This is an ugly way to put i18n in FacesMessages: https://jira.jboss.org/browse/SEAMFACES-24
              */
 
-            throw new ValidatorException(new FacesMessage(messageBuilder
-                    .key(new DefaultBundleKey("account_passwordsDoNotMatch")).defaults("Passwords do not match").build()
-                    .getText()));
+            throw new ValidatorException(new FacesMessage(appMsg.accountPasswordNotConfirmed()));
         }
     }
 

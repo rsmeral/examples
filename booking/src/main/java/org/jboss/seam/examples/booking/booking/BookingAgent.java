@@ -25,7 +25,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.TransactionPhase;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,7 +34,6 @@ import javax.persistence.PersistenceContext;
 
 import com.ocpsoft.pretty.time.PrettyTime;
 import org.jboss.seam.examples.booking.account.Authenticated;
-import org.jboss.seam.examples.booking.i18n.DefaultBundleKey;
 import org.jboss.seam.examples.booking.log.BookingLog;
 import org.jboss.seam.examples.booking.model.Booking;
 import org.jboss.seam.examples.booking.model.Hotel;
@@ -44,10 +42,10 @@ import org.jboss.seam.faces.context.conversation.Begin;
 import org.jboss.seam.faces.context.conversation.ConversationBoundaryInterceptor;
 import org.jboss.seam.faces.context.conversation.End;
 import org.jboss.seam.international.status.Messages;
-import org.jboss.seam.international.status.builder.TemplateMessage;
 import org.jboss.solder.logging.TypedCategory;
 
 import static javax.persistence.PersistenceContextType.EXTENDED;
+import org.jboss.seam.examples.booking.i18n.ApplicationMessages;
 
 /**
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
@@ -57,15 +55,16 @@ import static javax.persistence.PersistenceContextType.EXTENDED;
 @Named
 @Interceptors(ConversationBoundaryInterceptor.class) // not necessary, this is a temporary workaround for GLASSFISH-17184
 public class BookingAgent {
+    
+    @Inject
+    ApplicationMessages appMsg;
+    
     @Inject
     @TypedCategory(BookingAgent.class)
     private BookingLog log;
 
     @PersistenceContext(type = EXTENDED)
     private EntityManager em;
-
-    @Inject
-    private Instance<TemplateMessage> messageBuilder;
 
     @Inject
     private Messages messages;
@@ -109,8 +108,7 @@ public class BookingAgent {
         booking.setCreditCardNumber("1111222233334444");
         log.bookingInitiated(user.getName(), booking.getHotel().getName());
 
-        messages.info(new DefaultBundleKey("booking_initiated")).defaults("You've initiated a booking at the {0}.")
-                .params(booking.getHotel().getName());
+        messages.info(appMsg.bookingInitiated(booking.getHotel().getName()));
     }
 
     public void validate() {
@@ -133,8 +131,8 @@ public class BookingAgent {
 
     public void onBookingComplete(@Observes(during = TransactionPhase.AFTER_SUCCESS) @Confirmed final Booking booking) {
         log.bookingConfirmed(booking.getHotel().getName(), booking.getUser().getName());
-        messages.info(new DefaultBundleKey("booking_confirmed")).defaults("You're booked to stay at the {0} {1}.")
-                .params(booking.getHotel().getName(), new PrettyTime(locale).format(booking.getCheckinDate()));
+        messages.info(appMsg.bookingConfirmed(booking.getHotel().getName(), 
+                new PrettyTime(locale).format(booking.getCheckinDate())).toString());
     }
 
     @Produces

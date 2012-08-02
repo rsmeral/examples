@@ -38,7 +38,7 @@ import javax.persistence.criteria.Root;
 
 import org.jboss.solder.logging.Logger;
 import org.jboss.seam.examples.booking.account.Authenticated;
-import org.jboss.seam.examples.booking.i18n.DefaultBundleKey;
+import org.jboss.seam.examples.booking.i18n.ApplicationMessages;
 import org.jboss.seam.examples.booking.model.Booking;
 import org.jboss.seam.examples.booking.model.Booking_;
 import org.jboss.seam.examples.booking.model.User;
@@ -55,6 +55,10 @@ import org.jboss.seam.security.Identity;
 @SessionScoped
 @Named
 public class BookingHistory {
+    
+    @Inject
+    ApplicationMessages appMsg;
+    
     @Inject
     private Logger log;
 
@@ -100,13 +104,10 @@ public class BookingHistory {
         Booking booking = entityManager.find(Booking.class, selectedBooking.getId());
         if (booking != null) {
             entityManager.remove(booking);
-            messages.info(new DefaultBundleKey("booking_canceled"))
-                    .defaults("The booking at the {0} on {1} has been canceled.")
-                    .params(selectedBooking.getHotel().getName(),
-                            DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(selectedBooking.getCheckinDate()));
+            messages.info(appMsg.bookingCanceled(selectedBooking.getHotel().getName(),
+                            DateFormat.getDateInstance(SimpleDateFormat.MEDIUM).format(selectedBooking.getCheckinDate())));
         } else {
-            messages.info(new DefaultBundleKey("booking_doesNotExist")).defaults(
-                    "Our records indicate that the booking you selected has already been canceled.");
+            messages.info(appMsg.bookingDoesNotExist());
         }
 
         bookingsForUser.remove(selectedBooking);

@@ -23,25 +23,25 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
-
-import org.jboss.seam.examples.booking.i18n.DefaultBundleKey;
+import org.jboss.seam.examples.booking.i18n.ApplicationMessages;
 import org.jboss.seam.faces.validation.InputField;
-import org.jboss.seam.international.status.builder.BundleTemplateMessage;
 
 /**
- * Validate that both the password fields contain the same value. Implements the classic password change validation.
+ * Validate that both the password fields contain the same value. Implements the
+ * classic password change validation.
  *
  * @author <a href="mailto:lincolnbaxter@gmail.com">Lincoln Baxter, III</a>
  */
 @FacesValidator("confirmPassword")
 public class ConfirmPasswordValidator implements Validator {
+    
     @Inject
-    private BundleTemplateMessage messageBuilder;
-
+    ApplicationMessages appMsg;
+    
     @Inject
     @InputField
     private String password;
-
+    
     @Inject
     @InputField
     private String confirmPassword;
@@ -52,10 +52,7 @@ public class ConfirmPasswordValidator implements Validator {
         }
 
         if (!password.equals(confirmPassword)) {
-            throw new ValidatorException(new FacesMessage(messageBuilder
-                    .key(new DefaultBundleKey("account_passwordsDoNotMatch")).defaults("Passwords do not match").build()
-                    .getText()));
+            throw new ValidatorException(new FacesMessage(appMsg.accountPasswordsDoNotMatch()));
         }
     }
-
 }

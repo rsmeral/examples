@@ -24,7 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.jboss.seam.examples.booking.account.Authenticated;
-import org.jboss.seam.examples.booking.i18n.DefaultBundleKey;
+import org.jboss.seam.examples.booking.i18n.ApplicationMessages;
 import org.jboss.seam.examples.booking.model.User;
 import org.jboss.seam.international.status.Messages;
 import org.jboss.seam.security.Authenticator;
@@ -44,6 +44,9 @@ import org.picketlink.idm.impl.api.model.SimpleUser;
 public class BookingAuthenticator extends BaseAuthenticator implements Authenticator {
 
     @Inject
+    ApplicationMessages appMsg;
+    
+    @Inject
     private Logger log;
 
     @PersistenceContext
@@ -62,21 +65,20 @@ public class BookingAuthenticator extends BaseAuthenticator implements Authentic
     public void authenticate() {
         log.info("Logging in " + credentials.getUsername());
         if ((credentials.getUsername() == null) || (credentials.getCredential() == null)) {
-            messages.error(new DefaultBundleKey("identity_loginFailed")).defaults("Invalid username or password");
+            messages.error(appMsg.identityLoginFailed());
             setStatus(AuthenticationStatus.FAILURE);
         }
         User user = em.find(User.class, credentials.getUsername());
         if (user != null && credentials.getCredential() instanceof PasswordCredential && 
             user.getPassword().equals(((PasswordCredential) credentials.getCredential()).getValue())) {
             loginEventSrc.fire(user);
-            messages.info(new DefaultBundleKey("identity_loggedIn"), user.getName()).defaults("You're signed in as {0}")
-                    .params(user.getName());
+            messages.info(appMsg.identityLoggedIn(user.getName()));
             setStatus(AuthenticationStatus.SUCCESS);
             setUser(new SimpleUser(user.getUsername())); //TODO confirm the need for this set method
             return;
         }
 
-        messages.error(new DefaultBundleKey("identity_loginFailed")).defaults("Invalid username or password");
+        messages.error(appMsg.identityLoginFailed());
         setStatus(AuthenticationStatus.FAILURE);
 
     }

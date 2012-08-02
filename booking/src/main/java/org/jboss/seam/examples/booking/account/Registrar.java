@@ -27,11 +27,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.jboss.seam.examples.booking.i18n.ApplicationMessages;
 
-import org.jboss.seam.examples.booking.i18n.DefaultBundleKey;
 import org.jboss.seam.examples.booking.model.User;
 import org.jboss.seam.international.status.Messages;
-import org.jboss.seam.international.status.builder.BundleKey;
 
 /**
  * The view controller for registering a new user
@@ -41,6 +40,10 @@ import org.jboss.seam.international.status.builder.BundleKey;
 @Stateful
 @Model
 public class Registrar {
+    
+    @Inject
+    ApplicationMessages appMsg;
+    
     @PersistenceContext
     private EntityManager em;
 
@@ -67,9 +70,7 @@ public class Registrar {
             registered = true;
             em.persist(newUser);
 
-            messages.info(new DefaultBundleKey("registration_registered"))
-                    .defaults("You have been successfully registered as the user {0}! You can now login.")
-                    .params(newUser.getUsername());
+            messages.info(appMsg.registrationRegistered(newUser.getUsername()));
         } else {
             registrationInvalid = true;
         }
@@ -91,8 +92,7 @@ public class Registrar {
      */
     public void notifyIfRegistrationIsInvalid() {
         if (facesContext.isValidationFailed() || registrationInvalid) {
-            messages.warn(new DefaultBundleKey("registration_invalid")).defaults(
-                    "Invalid registration. Please correct the errors and try again.");
+            messages.warn(appMsg.registrationInvalid());
         }
     }
 
@@ -125,9 +125,8 @@ public class Registrar {
     private boolean verifyUsernameIsAvailable() {
         User existing = em.find(User.class, newUser.getUsername());
         if (existing != null) {
-            messages.warn(new BundleKey("messages", "account_usernameTaken"))
-                    .defaults("The username '{0}' is already taken. Please choose another username.")
-                    .targets(usernameInput.getClientId()).params(newUser.getUsername());
+            messages.warn(appMsg.accountUsernameTaken(newUser.getUsername()))
+                    .targets(usernameInput.getClientId());
             return false;
         }
 

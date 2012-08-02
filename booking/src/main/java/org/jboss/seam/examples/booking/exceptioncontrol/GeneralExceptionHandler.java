@@ -16,21 +16,21 @@
  */
 package org.jboss.seam.examples.booking.exceptioncontrol;
 
+import org.apache.deltaspike.core.api.exception.control.annotation.ExceptionHandler;
+import org.apache.deltaspike.core.api.exception.control.annotation.Handles;
+import org.apache.deltaspike.core.api.exception.control.event.ExceptionEvent;
 import org.jboss.solder.logging.Logger;
-import org.jboss.solder.exception.control.CaughtException;
-import org.jboss.solder.exception.control.Handles;
-import org.jboss.solder.exception.control.HandlesExceptions;
 
 /**
  * Logs all exceptions and allows the to propagate
  *
  * @author <a href="http://community.jboss.org/people/spinner">Jose Freitas</a>
  */
-@HandlesExceptions
+@ExceptionHandler
 public class GeneralExceptionHandler {
 
-    public void printExceptionMessage(@Handles CaughtException<Throwable> event, Logger log) {
+    public void printExceptionMessage(@Handles ExceptionEvent<Throwable> event, Logger log) {
         log.info("Exception logged by seam-catch catcher: " + event.getException().getMessage());
-        event.rethrow();
+        event.throwOriginal();
     }
 }

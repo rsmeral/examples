@@ -34,9 +34,9 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.deltaspike.core.api.exclude.annotation.Exclude;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
-import org.jboss.solder.core.Veto;
 
 /**
  * <p>
@@ -47,7 +47,7 @@ import org.jboss.solder.core.Veto;
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Entity
-@Veto
+@Exclude
 public class Booking implements Serializable {
     private Long id;
     private User user;

@@ -25,9 +25,9 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import org.apache.deltaspike.core.api.exclude.annotation.Exclude;
 
 import org.hibernate.validator.constraints.Email;
-import org.jboss.solder.core.Veto;
 
 /**
  * <p>
@@ -39,7 +39,7 @@ import org.jboss.solder.core.Veto;
  */
 @Entity
 @Table(name = "traveler")
-@Veto
+@Exclude
 public class User implements Serializable {
     private static final long serialVersionUID = -602733026033932730L;
     private String username;

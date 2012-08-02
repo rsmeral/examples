@@ -35,6 +35,21 @@
     </properties>
 
     <dependencies>
+        
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-api</artifactId>
+            <version>0.3-incubating-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-impl</artifactId>
+            <version>0.3-incubating-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        
         <!-- Annotation processor for generating typed loggers -->
         <dependency>
             <groupId>org.jboss.solder</groupId>
@@ -74,15 +89,15 @@
         </dependency>
         
         <dependency>
-           <groupId>org.jboss.seam.security</groupId>
-           <artifactId>seam-security</artifactId>
-           <scope>compile</scope>
+            <groupId>org.jboss.seam.security</groupId>
+            <artifactId>seam-security</artifactId>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
-           <groupId>org.jboss.seam.transaction</groupId>
-           <artifactId>seam-transaction</artifactId>
-           <scope>compile</scope>
+            <groupId>org.jboss.seam.transaction</groupId>
+            <artifactId>seam-transaction</artifactId>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
@@ -104,9 +119,9 @@
         </dependency>
         
         <dependency>
-         <groupId>commons-digester</groupId>
-         <artifactId>commons-digester</artifactId>
-         <version>2.1</version>
+            <groupId>commons-digester</groupId>
+            <artifactId>commons-digester</artifactId>
+            <version>2.1</version>
         </dependency>
         
         <!-- Bean Validation Implementation; provides portable constraints @NotEmpty, @Email and @Url -->
@@ -243,7 +258,8 @@
                                 resourceFilterGoals=process-resources
                                 resources\:testResources
                                 skipCompilerPlugin=true
-                                version=1</content>
+                                version=1
+                            </content>
                         </file>
                     </additionalConfig>
                     <additionalProjectFacets>
@@ -344,7 +360,7 @@
 
         <profile>
             <id>glassfish</id>
-             <activation>
+            <activation>
                 <property>
                     <name>arquillian</name>
                     <value>glassfish-remote-3.1</value>
@@ -359,7 +375,7 @@
                             <webResources>
                                 <resource>
                                     <directory>src/main/resources-glassfish</directory>
-                                 </resource>
+                                </resource>
                             </webResources>
                         </configuration>
                     </plugin>

@@ -9,7 +9,7 @@
     <ui:insert name="metadata"/>
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <title>#{bundles.messages.template_title}</title>
+        <title>#{appMsg.templateTitle}</title>
         <link rel="shortcut icon" href="#{request.contextPath}/favicon.ico"/>
 
         <h:outputStylesheet library="css" name="booking.css"/>
@@ -25,24 +25,24 @@
                     <div id="status">
                         <h:outputText value="(#{currentUser.name})" rendered="#{identity.loggedIn}" styleClass="user"/>
                         #{' '}
-                        <pretty:link mappingId="home">#{bundles.messages.template_linkHome}</pretty:link>
+                        <pretty:link mappingId="home">#{appMsg.templateLinkHome}</pretty:link>
                         #{' | '}
-                        <h:link id="search" outcome="/search.xhtml" value="#{bundles.messages.template_linkHotels}"/>
+                        <h:link id="search" outcome="/search.xhtml" value="#{appMsg.templateLinkHotels}"/>
                         <h:panelGroup rendered="#{not identity.loggedIn}">
                             #{' | '}
-                            <pretty:link mappingId="home">#{bundles.messages.template_linkLogin}</pretty:link>
+                            <pretty:link mappingId="home">#{appMsg.templateLinkLogin}</pretty:link>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{identity.loggedIn}">
                             #{' | '}
-                            <pretty:link mappingId="account">#{bundles.messages.template_linkAccount}</pretty:link>
+                            <pretty:link mappingId="account">#{appMsg.templateLinkAccount}</pretty:link>
                             #{' | '}
-                            <pretty:link mappingId="logout">#{bundles.messages.template_linkLogout}</pretty:link>
+                            <pretty:link mappingId="logout">#{appMsg.templateLinkLogout}</pretty:link>
                         </h:panelGroup>
-                        <h:panelGroup rendered="#{facesContext.application.projectStage == 'Development'}">
+                        <h:panelGroup rendered="#{currentProjectStage == 'Development'}">
                             #{' | '}
                             <h:commandLink action="pretty:home"
                                            actionListener="#{facesContext.externalContext.invalidateSession}"
-                                           value="#{bundles.messages.template_linkReset}"/>
+                                           value="#{appMsg.templateLinkReset}"/>
                         </h:panelGroup>
                     </div>
                 </h:form>
@@ -56,10 +56,10 @@
                 </div>
             </div>
             <div id="footer">
-                #{bundles.messages.template_createdWith}<br/>
-                #{bundles.messages.template_projectStage}: #{initParam['javax.faces.PROJECT_STAGE']}
+                #{appMsg.templateCreatedWith}<br/>
+                #{appMsg.templateProjectStage}: #{currentProjectStage}
                 #{' | '}
-                #{bundles.messages.template_currentConversation}:
+                #{appMsg.templateCurrentConversation}:
                 #{conversation.isTransient ? 'transient' : 'long-running, id: '.concat(conversation.id)}
             </div>
         </div>
